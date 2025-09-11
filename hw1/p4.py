@@ -46,9 +46,23 @@ class CoupledOscillators:
 
         """
         # TODO: Construct the stiffness matrix K
+        N = len(X0)  # number of oscillators
+
+        K = (
+            np.diag(np.repeat(2*k/m, N  )      ) + # Diagonal     elements: 2*k/m
+            np.diag(np.repeat(- k/m, N-1), k=+1) + # Off-diagonal elements: - k/m
+            np.diag(np.repeat(- k/m, N-1), k=-1)
+        )
+
         # TODO: Solve the eigenvalue problem for K to find normal modes
+        Omega2, V = np.linalg.eig(K)
+
         # TODO: Store angular frequencies and eigenvectors
+        self.Omega = np.sqrt(Omega2)
+        self.V     = V
+
         # TODO: Compute initial modal amplitudes M0 (normal mode decomposition)
+        self.M0    = V.T @ X0
 
     def __call__(self, t):
         """Calculate the displacements of the oscillators at time t.
@@ -61,7 +75,7 @@ class CoupledOscillators:
 
         """
         # TODO: Reconstruct the displacements from normal modes
-
+        return self.V @ (self.M0 * np.cos(self.Omega * t))
 
 if __name__ == "__main__":
 
