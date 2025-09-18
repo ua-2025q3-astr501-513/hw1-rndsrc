@@ -88,6 +88,9 @@ def multibit_negative(A):
 
     """
     # TODO: implement the function here
+    Not = [NOT(a) for a in A]
+    One = [1] + [0] * (len(A)-1)
+    return multibit_adder(Not, One)
 
 # We are now ready to implement subtraction using multibit_adder() and
 # multibit_negative().
@@ -110,3 +113,5 @@ def multibit_subtractor(A, B):
 
     """
     # TODO: implement the function here
+    assert len(A) == len(B)
+    return multibit_adder(A, multibit_negative(B))

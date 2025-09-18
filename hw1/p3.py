@@ -31,6 +31,8 @@
 # to overcome catastrophic cancellation.
 # Please make sure that you take care of all the special cases.
 
+from math import isclose
+
 def quadratic(a, b, c):
     """Numerically stable quadratic equation solver
 
@@ -65,3 +67,19 @@ def quadratic(a, b, c):
                 If there is no real root, x1 == x2 == None.
     """
     # TODO: implement the stable quadratic equation solver here
+
+    bb  = b * b
+    ac4 = a * c * 4
+
+    if isclose(bb, ac4):
+        return b / (-2*a), None
+    elif ac4 > bb:
+        return None, None
+    else:
+        s  = 1 if b >= 0 else -1
+        x1 = (b + s*(b*b-4*a*c)**(1/2)) / (-2*a)
+        x2 = (c / a) / x1
+        # d  = (bb - ac4)**(1/2)
+        # x1 = (b - d) / (-2*a)
+        # x2 = (b + d) / (-2*a)
+        return min(x1, x2), max(x1, x2)
